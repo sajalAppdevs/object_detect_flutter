@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
   String? _imagePath;
 
   void detectObject() async {
-    _imagePath = await EdgeDetection.detectEdge;
+    _imagePath = (await EdgeDetection.detectEdge) as String?;
     setState(() {});
   }
 
