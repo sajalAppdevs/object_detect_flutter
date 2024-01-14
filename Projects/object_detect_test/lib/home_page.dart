@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:edge_detection/edge_detection.dart';
 import 'package:flutter/material.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -7,11 +11,51 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _imagePath;
+
+  void detectObject() async {
+    _imagePath = (await EdgeDetection.detectEdge) as String?;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Hello'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: ElevatedButton(
+                onPressed: detectObject,
+                child: const Text('Scan Object'),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text('Cropped image path:', style: TextStyle(fontSize: 20)),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
+              child: Text(
+                _imagePath ?? '',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Visibility(
+              visible: _imagePath != null,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.file(
+                  File(_imagePath ?? ''),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
